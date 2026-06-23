@@ -1,0 +1,173 @@
+# 🚀 FoodSupply Engine – ONE CLICK BATCH FILE (FINAL)
+
+---
+
+# 📁 FILE NAME
+
+```text
+run_project.bat
+```
+
+---
+
+# 🧨 COMPLETE BATCH FILE (COPY PASTE FULL)
+
+```bat
+@echo off
+title 🚀 FoodSupply Engine - Auto Runner
+
+echo ========================================
+echo 🔥 STARTING FOODSUPPLY ENGINE
+echo ========================================
+
+echo.
+echo 🧹 STEP 1: Freeing Ports...
+powershell -Command "Get-NetTCPConnection -LocalPort 8000,9092,3306 -ErrorAction SilentlyContinue | ForEach-Object { Stop-Process -Id $_.OwningProcess -Force }"
+
+echo.
+echo 🐳 STEP 2: Starting Docker Containers...
+docker start qa-zookeeper
+docker start qa-kafka
+docker start qa-mysql
+
+timeout /t 5 >nul
+
+echo.
+echo 🌐 STEP 3: Starting FastAPI Server...
+start cmd /k "title FastAPI Server && uvicorn app.main:app --reload"
+
+timeout /t 3 >nul
+
+echo.
+echo ⚙️ STEP 4: Starting Order Service...
+start cmd /k "title Order Service && python services/order_service.py"
+
+echo.
+echo 🍳 STEP 5: Starting Kitchen Service...
+start cmd /k "title Kitchen & Inventory && python services/kitchen_service.py"
+
+echo.
+echo 🚚 STEP 6: Starting Delivery Service...
+start cmd /k "title Delivery Service && python services/delivery_service.py"
+
+echo.
+echo ❌ STEP 7: Starting DLQ Service...
+start cmd /k "title DLQ Service && python services/dlq_service.py"
+
+echo.
+echo 🚫 STEP 8: Starting Duplicate Service...
+start cmd /k "title Duplicate Monitor && python services/duplicate_service.py"
+
+timeout /t 5 >nul
+
+echo.
+echo 🌍 STEP 9: Opening Browser...
+start http://127.0.0.1:8000/orders
+
+echo.
+echo ========================================
+echo ✅ SYSTEM STARTED SUCCESSFULLY
+echo ========================================
+
+pause
+```
+
+---
+
+# ⚙️ HOW TO USE
+
+1. Save file as:
+
+```text
+run_project.bat
+```
+
+2. Double click
+
+✔ Docker starts
+✔ Services open in separate windows
+✔ Browser opens automatically
+✔ Orders start flowing
+
+---
+
+# 🔥 OPTIONAL (ADD REPORTING)
+
+## Add Newman (manual step)
+
+```bat
+newman run collection.json -r cli,allure
+```
+
+---
+
+## Add Allure (manual step)
+
+```bat
+allure generate allure-results --clean -o allure-report
+allure open allure-report
+```
+
+---
+
+## Add Grafana (optional container)
+
+```bat
+docker run -d -p 3000:3000 grafana/grafana
+start http://localhost:3000
+```
+
+---
+
+# ⚠️ IMPORTANT RULES
+
+✔ Always run batch file from project root
+✔ Docker must be installed
+✔ Python must be installed
+✔ Kafka containers must exist (qa-kafka, qa-zookeeper, qa-mysql)
+
+---
+
+# 💣 COMMON ISSUES FIX
+
+### ❌ Docker not starting
+
+👉 Open Docker Desktop first
+
+---
+
+### ❌ Port already used
+
+👉 Batch already handles it
+
+---
+
+### ❌ Services blank
+
+👉 Wait 5–10 seconds (Kafka delay)
+
+---
+
+# 🎯 FINAL RESULT
+
+Double click → Full system runs
+
+```text
+✔ API
+✔ Kafka
+✔ Services
+✔ Browser trigger
+✔ Full flow visible
+```
+
+---
+
+# 🔥 THIS IS YOUR LEVEL NOW
+
+Not manual running.
+
+👉 **One-click enterprise demo system**
+
+---
+
+END OF BATCH FILE GUIDE
