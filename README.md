@@ -1,6 +1,7 @@
 # 📦 FoodSupply Engine – Event Driven Order Management System (OMS)
 
 ---
+💡 This project simulates a real-world distributed order processing system used in modern e-commerce and food delivery platforms.
 
 ## 🚀 Project Overview
 
